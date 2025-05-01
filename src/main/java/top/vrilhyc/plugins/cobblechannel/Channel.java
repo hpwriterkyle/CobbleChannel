@@ -21,7 +21,7 @@ public interface Channel {
         if(!isInChannel(serverPlayer)){
             return false;
         }
-        serverPlayer.getServer().getPlayerManager().getPlayerList().stream().filter(a->isInChannel(a)).forEach(a->Utils.sendMessage(a,message.getSignedContent()));
+        serverPlayer.getServer().getPlayerManager().getPlayerList().stream().filter(this::isInChannel).forEach(a->Utils.displayMessage(a,("[%s]<%s> "+message.getSignedContent()).formatted(getChannelName(),serverPlayer.getName().getLiteralString())));
         return true;
     }
     default boolean isInChannel(ServerPlayerEntity serverPlayer){
