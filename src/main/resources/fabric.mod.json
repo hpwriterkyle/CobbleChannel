@@ -1,0 +1,35 @@
+{
+  "schemaVersion": 1,
+  "id": "cobblechannel",
+  "version": "${version}",
+  "name": "CobbleChannel",
+  "description": "just the cobble trade",
+  "authors": [],
+  "contact": {},
+  "license": "All-Rights-Reserved",
+  "icon": "assets/cobblechannel/icon.png",
+  "environment": "*",
+  "entrypoints": {
+    "fabric-datagen": [
+      "top.vrilhyc.plugins.cobblechannel.client.CobblechannelDataGenerator"
+    ],
+    "client": [
+      "top.vrilhyc.plugins.cobblechannel.client.CobblechannelClient"
+    ],
+    "main": [
+      "top.vrilhyc.plugins.cobblechannel.Cobblechannel"
+    ]
+  },
+  "mixins": [
+    "cobblechannel.mixins.json",
+    {
+      "config": "cobblechannel.client.mixins.json",
+      "environment": "client"
+    }
+  ],
+  "depends": {
+    "fabricloader": ">=${loader_version}",
+    "fabric": "*",
+    "minecraft": "${minecraft_version}"
+  }
+}
