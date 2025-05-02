@@ -5,6 +5,7 @@ import net.minecraft.network.message.SentMessage;
 import net.minecraft.network.message.SignedMessage;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.Text;
+import net.minecraft.util.Formatting;
 
 public class Utils {
     public static void sendMessage(ServerPlayerEntity serverPlayer,String content){
@@ -12,6 +13,6 @@ public class Utils {
     }
 
     public static void displayMessage(ServerPlayerEntity serverPlayer,String content){
-        serverPlayer.sendMessageToClient(Text.literal(content),false);
+        serverPlayer.sendMessageToClient(Text.literal(content).formatted(),false);
     }
 }

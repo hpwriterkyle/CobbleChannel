@@ -12,4 +12,9 @@ public class StaffChannel implements Channel{
     public String getChannelDisplayName() {
         return "SC";
     }
+
+    @Override
+    public String getFormat() {
+        return "§b[%channel]§r %player | §b%content";
+    }
 }

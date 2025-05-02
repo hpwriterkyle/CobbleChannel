@@ -10,4 +10,9 @@ public class BuilderChannel implements Channel{
     public String getChannelDisplayName() {
         return "BC";
     }
+
+    @Override
+    public String getFormat() {
+        return "§6[%channel]§r %player | §6%content";
+    }
 }

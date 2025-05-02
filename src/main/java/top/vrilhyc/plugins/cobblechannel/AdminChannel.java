@@ -10,4 +10,9 @@ public class AdminChannel implements Channel{
     public String getChannelDisplayName() {
         return "AC";
     }
+
+    @Override
+    public String getFormat() {
+        return "§c[%channel]§r %player | §c%content";
+    }
 }
