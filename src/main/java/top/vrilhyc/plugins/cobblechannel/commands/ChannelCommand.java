@@ -37,8 +37,32 @@ public class ChannelCommand {
 
     public static void register(CommandDispatcher<ServerCommandSource> dispatcher) {
         LiteralArgumentBuilder<ServerCommandSource> builder = literal("channel");
+        LiteralArgumentBuilder<ServerCommandSource> scBuilder = literal("sc");
+        scBuilder.executes(a->{
+            String channelName = "staff";
+            if (!(a.getSource().getPlayer() instanceof ServerPlayerEntity serverPlayer)) {
+                return 1;
+            }
+            return channel(serverPlayer,channelName);
+        });
+        LiteralArgumentBuilder<ServerCommandSource> bcBuilder = literal("bc");
+        bcBuilder.executes(a->{
+            String channelName = "builder";
+            if (!(a.getSource().getPlayer() instanceof ServerPlayerEntity serverPlayer)) {
+                return 1;
+            }
+            return channel(serverPlayer,channelName);
+        });
+        LiteralArgumentBuilder<ServerCommandSource> acBuilder = literal("ac");
+        acBuilder.executes(a->{
+            String channelName = "admin";
+            if (!(a.getSource().getPlayer() instanceof ServerPlayerEntity serverPlayer)) {
+                return 1;
+            }
+            return channel(serverPlayer,channelName);
+        });
 
-        builder.requires(a->a.hasPermissionLevel(4)).then(argument("channelName", StringArgumentType.string()).suggests((commandContext, suggestionsBuilder) -> {
+        builder.then(argument("channelName", StringArgumentType.string()).suggests((commandContext, suggestionsBuilder) -> {
             Channel.registeredChannels.keySet().forEach(suggestionsBuilder::suggest);
             return suggestionsBuilder.buildFuture();
         }).executes(a->{
@@ -46,24 +70,14 @@ public class ChannelCommand {
                     if (!(a.getSource().getPlayer() instanceof ServerPlayerEntity serverPlayer)) {
                         return 1;
                     }
-                    Channel channel = Channel.registeredChannels.get(channelName);
-                    if(channel==null){
-                        Utils.displayMessage(serverPlayer,"There is no channel %s".formatted(channelName));
-                        return 1;
-                    }
-                    if(isSomeGroup(serverPlayer.getUuid(),channelName)){
-                        if(channel.joinChannel(serverPlayer)) {
-                            Utils.displayMessage(serverPlayer,"You have successfully joined the %s channel".formatted(channelName));
-                            return 1;
-                        }
-                        channel.leaveChannel(serverPlayer);
-                        Utils.displayMessage(serverPlayer,"You have successfully leaved the %s channel".formatted(channelName));
-                    }
-                    return 1;
+                    return channel(serverPlayer,channelName);
                 })
         );
 
         dispatcher.register(builder);
+        dispatcher.register(acBuilder);
+        dispatcher.register(scBuilder);
+        dispatcher.register(bcBuilder);
     }
 
     public static boolean isSomeGroup(UUID who,String group) {
@@ -77,11 +91,29 @@ public class ChannelCommand {
 //
 //                    ;
 //        } catch (Exception ignored) {
-        try {
-            return Permissions.check(who, "cobblechannel." + group).get();
-        }catch (Exception|Error ex){
-            return true;
-        }
+        return true;
+//        try {
+//            return Permissions.check(who, "cobblechannel." + group).get();
+//        }catch (Exception|Error ex){
+//            return true;
 //        }
+//        }
+    }
+
+    public static int channel(ServerPlayerEntity serverPlayer,String channelName){
+        Channel channel = Channel.registeredChannels.get(channelName);
+        if(channel==null){
+            Utils.displayMessage(serverPlayer,"There is no channel %s".formatted(channelName));
+            return 1;
+        }
+        if(isSomeGroup(serverPlayer.getUuid(),channelName)){
+            if(channel.joinChannel(serverPlayer)) {
+                Utils.displayMessage(serverPlayer,"You have successfully joined the %s channel".formatted(channelName));
+                return 1;
+            }
+            channel.leaveChannel(serverPlayer);
+            Utils.displayMessage(serverPlayer,"You have successfully leaved the %s channel".formatted(channelName));
+        }
+        return 1;
     }
 }

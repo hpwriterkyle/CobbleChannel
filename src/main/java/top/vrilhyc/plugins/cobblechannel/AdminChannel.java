@@ -5,4 +5,9 @@ public class AdminChannel implements Channel{
     public String getChannelName() {
         return "admin";
     }
+
+    @Override
+    public String getChannelDisplayName() {
+        return "AC";
+    }
 }

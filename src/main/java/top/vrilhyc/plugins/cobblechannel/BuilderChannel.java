@@ -5,4 +5,9 @@ public class BuilderChannel implements Channel{
     public String getChannelName() {
         return "builder";
     }
+
+    @Override
+    public String getChannelDisplayName() {
+        return "BC";
+    }
 }

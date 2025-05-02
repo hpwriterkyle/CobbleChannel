@@ -17,15 +17,24 @@ public interface Channel {
     AdminChannel ADMIN_CHANNEL = registerChannel(new AdminChannel());
     BuilderChannel BUILDER_CHANNEL = registerChannel(new BuilderChannel());
     String getChannelName();
+    default String getChannelDisplayName(){
+        return getChannelName();
+    }
+    default String getFormat(){
+        return "[%channel] %player | %content";
+    }
+    default String formatted(ServerPlayerEntity serverPlayer,SignedMessage message){
+        return getFormat().replace("%channel",getChannelDisplayName()).replace("%player",serverPlayer.getName().getLiteralString()).replace("%content",message.getSignedContent());
+    }
     default boolean sendMessage(ServerPlayerEntity serverPlayer,SignedMessage message){
         if(!isInChannel(serverPlayer)){
             return false;
         }
-        serverPlayer.getServer().getPlayerManager().getPlayerList().stream().filter(this::isInChannel).forEach(a->Utils.displayMessage(a,("[%s]<%s> "+message.getSignedContent()).formatted(getChannelName(),serverPlayer.getName().getLiteralString())));
+        serverPlayer.getServer().getPlayerManager().getPlayerList().stream().filter(this::isInChannel).forEach(a->Utils.displayMessage(a,formatted(serverPlayer,message)));
         return true;
     }
     default boolean isInChannel(ServerPlayerEntity serverPlayer){
-        return channels.containsKey(serverPlayer.getUuid());
+        return channels.getOrDefault(serverPlayer.getUuid(),"").equalsIgnoreCase(getChannelName());
     }
     default boolean joinChannel(ServerPlayerEntity serverPlayer){
         if(isInChannel(serverPlayer)){

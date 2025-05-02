@@ -7,4 +7,9 @@ public class StaffChannel implements Channel{
     public String getChannelName() {
         return "staff";
     }
+
+    @Override
+    public String getChannelDisplayName() {
+        return "SC";
+    }
 }
