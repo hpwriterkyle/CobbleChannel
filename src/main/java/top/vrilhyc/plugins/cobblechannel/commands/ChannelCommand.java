@@ -75,9 +75,9 @@ public class ChannelCommand {
         );
 
         dispatcher.register(builder);
-        dispatcher.register(acBuilder);
         dispatcher.register(scBuilder);
         dispatcher.register(bcBuilder);
+        dispatcher.register(acBuilder);
     }
 
     public static boolean isSomeGroup(UUID who,String group) {
@@ -91,12 +91,12 @@ public class ChannelCommand {
 //
 //                    ;
 //        } catch (Exception ignored) {
-        return true;
-//        try {
-//            return Permissions.check(who, "cobblechannel." + group).get();
-//        }catch (Exception|Error ex){
-//            return true;
-//        }
+//        return true;
+        try {
+            return Permissions.check(who, "cobblechannel." + group).get();
+        }catch (Exception|Error ex){
+            return true;
+        }
 //        }
     }
 
