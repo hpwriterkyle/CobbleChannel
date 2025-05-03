@@ -112,7 +112,7 @@ public class ChannelCommand {
                 return 1;
             }
             channel.leaveChannel(serverPlayer);
-            Utils.displayMessage(serverPlayer,"You have successfully leaved the %s channel".formatted(channelName));
+            Utils.displayMessage(serverPlayer,"You have successfully left the %s channel".formatted(channelName));
         }
         return 1;
     }

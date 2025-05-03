@@ -1,5 +1,7 @@
 package top.vrilhyc.plugins.cobblechannel;
 
+import me.lucko.fabric.api.permissions.v0.Permissions;
+import net.luckperms.api.LuckPerms;
 import net.minecraft.network.message.MessageType;
 import net.minecraft.network.message.SentMessage;
 import net.minecraft.network.message.SignedMessage;
@@ -30,11 +32,14 @@ public interface Channel {
         if(!isInChannel(serverPlayer)){
             return false;
         }
-        serverPlayer.getServer().getPlayerManager().getPlayerList().stream().filter(this::isInChannel).forEach(a->Utils.displayMessage(a,formatted(serverPlayer,message)));
+        serverPlayer.getServer().getPlayerManager().getPlayerList().stream().filter(this::isReciviable).forEach(a->Utils.displayMessage(a,formatted(serverPlayer,message)));
         return true;
     }
     default boolean isInChannel(ServerPlayerEntity serverPlayer){
         return channels.getOrDefault(serverPlayer.getUuid(),"").equalsIgnoreCase(getChannelName());
+    }
+    default boolean isReciviable(ServerPlayerEntity serverPlayer){
+        return Permissions.check(serverPlayer,"cobblechannel."+getChannelName());
     }
     default boolean joinChannel(ServerPlayerEntity serverPlayer){
         if(isInChannel(serverPlayer)){
